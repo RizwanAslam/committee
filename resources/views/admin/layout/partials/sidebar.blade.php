@@ -13,7 +13,7 @@
         <div class="logged-user-w">
             <div class="avatar-w"><img alt="" src="{{asset('assets\img\avatar1.jpg')}}"></div>
             <div class="logged-user-info-w">
-                <div class="logged-user-name">Maria Gomez</div>
+                <div class="logged-user-name">{{Auth::user()->first_name}}</div>
                 <div class="logged-user-role">Administrator</div>
             </div>
         </div>
@@ -54,14 +54,15 @@ END - Mobile Menu
             <div class="logged-user-i">
                 <div class="avatar-w"><img alt="" src="{{asset('assets/img/avatar1.jpg')}}"></div>
                 <div class="logged-user-info-w">
-                    <div class="logged-user-name">Maria Gomez</div>
+                    <div class="logged-user-name">{{Auth::user()->full_name}}</div>
                     <div class="logged-user-role">Administrator</div>
                 </div>
                 <div class="logged-user-menu">
                     <div class="logged-user-avatar-info">
                         <div class="avatar-w"><img alt="" src="{{asset('assets/img/avatar1.jpg')}}"></div>
                         <div class="logged-user-info-w">
-                            <div class="logged-user-name">Maria Gomez</div>
+                            <div class="logged-user-name">{{Auth::user()->full_name}}</div>
+
                             <div class="logged-user-role">Administrator</div>
                         </div>
                     </div>

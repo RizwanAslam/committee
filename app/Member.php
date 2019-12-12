@@ -38,13 +38,14 @@ class Member extends Authenticatable
      *
      * @var array
      */
+
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
 
     public function committees()
     {
-        return $this->belongsToMany('App\Committee')->withPivot(['id', 'quantity', 'amount', 'status', 'withdraw_date', 'withdraw_month', 'withdraw_order','monthly_withdraw_date', 'withdraw'])->withTimestamps();
+        return $this->belongsToMany('App\Committee')->withPivot(['id', 'quantity', 'amount', 'status', 'withdraw_date', 'withdraw_month', 'withdraw_order', 'monthly_withdraw_date', 'withdraw'])->withTimestamps();
     }
 
     public function getFullNameAttribute()

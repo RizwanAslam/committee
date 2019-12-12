@@ -25,5 +25,7 @@ class MembersTableSeeder extends Seeder
         $role = Role::query()->where('name', 'admin')->first();
 
         $member->assignRole($role);
+
+
     }
 }

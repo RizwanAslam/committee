@@ -6,6 +6,7 @@ use App\Committee;
 use App\Http\Requests\CommitteeRequest;
 use App\Pay;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\DeclareDeclare;
 use Yajra\DataTables\DataTables;
@@ -32,7 +33,10 @@ class CommitteeController extends Controller
      */
     public function create()
     {
-        return view('admin.committees.create');
+        if (auth()->user()->hasRole('admin')) {
+            return view('admin.committees.create');
+        }
+        return redirect(route('committees.index'));
     }
 
     /**
@@ -71,8 +75,6 @@ class CommitteeController extends Controller
     {
         $committee = Committee::findOrFail($id);
         $members = $committee->members()->whereMonth('committee_member.created_at', Carbon::now()->month)->get();
-
-
         return view('admin.committees.show', compact('committee', 'members'));
     }
 
@@ -84,8 +86,11 @@ class CommitteeController extends Controller
      */
     public function edit($id)
     {
-        $committee = Committee::find($id);
-        return view('admin.committees.edit', compact('committee'));
+        if (auth()->user()->hasRole('admin')) {
+            $committee = Committee::find($id);
+            return view('admin.committees.edit', compact('committee'));
+        }
+        return redirect(route('committees.index'));
     }
 
     /**
@@ -124,14 +129,24 @@ class CommitteeController extends Controller
      */
     public function destroy($id)
     {
-        $committee = Committee::findOrFail($id);
-        $committee->delete();
+        if (auth()->user()->hasRole('admin')) {
+            $committee = Committee::findOrFail($id);
+            $committee->delete();
+            return redirect(route('committees.index'));
+        }
         return redirect(route('committees.index'));
     }
 
     public function datatable()
     {
-        $committees = Committee::select('id', 'name', 'start_date', 'end_date', 'duration', 'total_members', 'withDraw_amount', 'amount');
+        if (auth()->user()->hasRole('admin'))
+            $committees = Committee::query();
+        else
+            $committees = Committee::whereHas('members', function ($query) {
+                $query->where('members.id', auth()->user()->id);
+            });
+
+
         return Datatables::of($committees)
             ->editColumn('name', function ($committee) {
                 return str_limit($committee->name, $limit = 10, $end = '...');
@@ -157,5 +172,6 @@ class CommitteeController extends Controller
             ->addColumn('actions', function ($committee) {
                 return view('admin.committees.partials.actions', compact('committee'));
             })->rawColumns(['name', 'start_date', 'end_date', 'duration', 'total_members', 'withDraw_amount', 'amount', 'actions'])->make(true);
+
     }
 }

@@ -7,6 +7,7 @@ use App\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Redirect;
+use Spatie\Permission\Models\Permission;
 
 class CommitteeMemberController extends Controller
 {
@@ -15,6 +16,8 @@ class CommitteeMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public $permissions;
+
     function __construct()
     {
         $this->middleware('permission:committee-members.confirm');
@@ -33,13 +36,15 @@ class CommitteeMemberController extends Controller
      */
     public function create($committee_id)
     {
-        $committee = Committee::where('id', $committee_id)->with(['members' => function ($query) {
-            $query->orderBy('withdraw_order', 'asc');
-        }])->first();
-        $members = Member::query()->select('first_name', 'last_name', 'id')->get();
-        $status = $committee->members()->wherePivot('status', 'unpaid')->get();
-
-        return view('admin.committee_members.create', compact('committee', 'members', 'status'));
+        if (auth()->user()->hasRole('admin')) {
+            $committee = Committee::where('id', $committee_id)->with(['members' => function ($query) {
+                $query->orderBy('withdraw_order', 'asc');
+            }])->first();
+            $members = Member::query()->select('first_name', 'last_name', 'id')->get();
+            $status = $committee->members()->wherePivot('status', 'unpaid')->get();
+            return view('admin.committee_members.create', compact('committee', 'members', 'status'));
+        }
+        return redirect(route('committees.index'));
     }
 
     /**
@@ -132,9 +137,12 @@ class CommitteeMemberController extends Controller
 
     public function confirm($committee_id, $member_id, $id)
     {
-        $committee = Committee::query()->findOrFail($committee_id);
-        $member = $committee->members()->wherePivot('id', $id)->first();
-        return view('admin.committee_members.confirm', compact('committee', 'member'));
+        if (auth()->user()->hasRole('admin')) {
+            $committee = Committee::query()->findOrFail($committee_id);
+            $member = $committee->members()->wherePivot('id', $id)->first();
+            return view('admin.committee_members.confirm', compact('committee', 'member'));
+        }
+        return redirect(route('committees.index'));
     }
 
 

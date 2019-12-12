@@ -18,10 +18,12 @@ class PayController extends Controller
 
     public function index($committee_id, $member_id, $id)
     {
-        $committee = Committee::query()->findOrFail($committee_id);
-        $member = $committee->members()->wherePivot('id', $id)->first();
-
-        return view('admin.committee_members.pay', compact('committee', 'member'));
+        if (auth()->user()->hasRole('admin')) {
+            $committee = Committee::query()->findOrFail($committee_id);
+            $member = $committee->members()->wherePivot('id', $id)->first();
+            return view('admin.committee_members.pay', compact('committee', 'member'));
+        }
+        return redirect(route('committees.index'));
     }
 
     /**
