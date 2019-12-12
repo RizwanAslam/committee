@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Committee;
 use App\Pay;
 Use \Carbon\Carbon;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 
 class PayController extends Controller

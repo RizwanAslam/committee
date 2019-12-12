@@ -6,8 +6,6 @@ use App\Committee;
 use App\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Redirect;
-use Spatie\Permission\Models\Permission;
 
 class CommitteeMemberController extends Controller
 {
@@ -16,8 +14,6 @@ class CommitteeMemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public $permissions;
-
     function __construct()
     {
         $this->middleware('permission:committee-members.confirm');

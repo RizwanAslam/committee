@@ -47,7 +47,6 @@ class CommitteeController extends Controller
      */
     public function store(CommitteeRequest $request)
     {
-
         $start_date = Carbon::parse($request->start_date);
         $end_date = Carbon::parse($request->end_date);
         $withDrawAmount = $request->total_members * $request->amount;
@@ -61,7 +60,6 @@ class CommitteeController extends Controller
             'withDraw_amount' => $withDrawAmount,
             'amount' => $request->amount,
         ]);
-
         return redirect(route('committees.index'));
     }
 
@@ -103,21 +101,9 @@ class CommitteeController extends Controller
     public function update(Request $request, $id)
     {
         $committee = Committee::findOrFail($id);
-
-        $start_date = Carbon::parse($request->start_date);
-        $end_date = Carbon::parse($request->end_date);
-        $withDrawAmount = $request->total_members * $request->amount;
-
         $committee->update([
             'name' => $request->name,
-//            'start_date' => $start_date->toDateTimeString(),
-//            'end_date' => $end_date->toDateTimeString(),
-//            'duration' => $start_date->diffInMonths($end_date),
-//            'total_members' => $request->total_members,
-//            'withDraw_amount' => $withDrawAmount,
-//            'amount' => $request->amount,
         ]);
-
         return redirect(route('committees.index'));
     }
 
@@ -145,8 +131,6 @@ class CommitteeController extends Controller
             $committees = Committee::whereHas('members', function ($query) {
                 $query->where('members.id', auth()->user()->id);
             });
-
-
         return Datatables::of($committees)
             ->editColumn('name', function ($committee) {
                 return str_limit($committee->name, $limit = 10, $end = '...');
@@ -172,6 +156,5 @@ class CommitteeController extends Controller
             ->addColumn('actions', function ($committee) {
                 return view('admin.committees.partials.actions', compact('committee'));
             })->rawColumns(['name', 'start_date', 'end_date', 'duration', 'total_members', 'withDraw_amount', 'amount', 'actions'])->make(true);
-
     }
 }

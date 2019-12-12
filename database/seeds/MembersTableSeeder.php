@@ -21,11 +21,7 @@ class MembersTableSeeder extends Seeder
             'address' => 'satellite town sargodha',
             'password' => bcrypt('12345678'),
         ]);
-
         $role = Role::query()->where('name', 'admin')->first();
-
         $member->assignRole($role);
-
-
     }
 }
