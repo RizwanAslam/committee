@@ -1,7 +1,7 @@
 <?php
 
+use App\Member;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class MembersTableSeeder extends Seeder
@@ -13,7 +13,11 @@ class MembersTableSeeder extends Seeder
      */
     public function run()
     {
-        $member = factory(\App\Member::class)->create([
+        $company = \App\Company::create([
+            'name' => 'software house',
+        ]);
+        $member = Member::create([
+            'company_id' => $company->id,
             'first_name' => 'Hammad',
             'last_name' => 'Soby',
             'email' => 'hammad@codebrisk.com',
@@ -21,6 +25,7 @@ class MembersTableSeeder extends Seeder
             'address' => 'satellite town sargodha',
             'password' => bcrypt('12345678'),
         ]);
+
         $role = Role::query()->where('name', 'admin')->first();
         $member->assignRole($role);
     }

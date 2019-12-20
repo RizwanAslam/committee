@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Company;
 use App\Http\Controllers\Controller;
 use App\Member;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Spatie\Permission\Models\Role;
+
 
 class RegisterController extends Controller
 {
@@ -38,7 +41,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-        $this->middleware('permission:register');
+//        $this->middleware('permission:register');
     }
 
     /**
@@ -50,7 +53,10 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'cnic' => 'required|unique:members|min:15|max:15',
+            'address' => 'required',
             'email' => ['required', 'string', 'email', 'max:255', 'unique:members'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -64,10 +70,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Member::create([
-            'name' => $data['name'],
+        $company = Company::create([
+            'name' => $data['first_name']
+        ]);
+
+        $member = Member::create([
+            'company_id' => $company->id,
+            'first_name' => $data['first_name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'cnic' => $data['cnic'],
+            'address' => $data['address'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $role = Role::updateOrCreate(['name' => 'admin']);
+        $member->assignRole($role);
+
+        return $member;
+
+
     }
 }

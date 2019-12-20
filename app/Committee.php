@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\CompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Committee extends Model
@@ -10,8 +11,22 @@ class Committee extends Model
     protected $dates = [
         'seen_at',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        static::addGlobalScope(new CompanyScope());
+        static::observe(\App\Observers\CommonObserver::class);
+
+    }
+
     public function members()
     {
-        return $this->belongsToMany('App\Member')->withPivot(['id', 'quantity', 'amount','status','withdraw_date','withdraw_month','withdraw_order','monthly_withdraw_date','withdraw'])->withTimestamps();
+        return $this->belongsToMany(Member::class)->withPivot(['id', 'quantity', 'amount', 'status', 'withdraw_date', 'withdraw_month', 'withdraw_order', 'monthly_withdraw_date', 'withdraw'])->withTimestamps();
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
     }
 }

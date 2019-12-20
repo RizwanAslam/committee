@@ -3,15 +3,15 @@
 namespace App;
 
 use App\Notifications\MemberInvitationNotification;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Observers\CommonObserver;
+use App\Scopes\CompanyScope;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 
 class Member extends Authenticatable
 {
-    use Notifiable;
-    use HasRoles;
+    use Notifiable, HasRoles;
     protected $guard_name = 'web';
 
     /**
@@ -19,7 +19,7 @@ class Member extends Authenticatable
      *
      * @var array
      */
-    protected $fillable = ['first_name', 'last_name', 'email', 'cnic', 'address'];
+    protected $fillable = ['company_id', 'first_name', 'last_name', 'email', 'cnic', 'address', 'password'];
     protected $dates = [
         'seen_at',
     ];
@@ -42,6 +42,21 @@ class Member extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected static function boot()
+    {
+        parent::boot();
+        if (auth()->check()) {
+            static::addGlobalScope(new CompanyScope());
+        }
+        static::observe(CommonObserver::class);
+
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class, 'company_id', 'id');
+    }
 
     public function committees()
     {

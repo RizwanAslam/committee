@@ -17,6 +17,7 @@ class CreatePaysTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('committee_id');
             $table->unsignedBigInteger('member_id');
+            $table->unsignedBigInteger('company_id');
             $table->timestamp('date')->useCurrent();
             $table->integer('quantity');
             $table->integer('amount');
@@ -26,6 +27,8 @@ class CreatePaysTable extends Migration
                 ->references('id')->on('committees')->onDelete('cascade');
             $table->foreign('member_id')
                 ->references('id')->on('members')->onDelete('cascade');
+            $table->foreign('company_id')
+                ->references('id')->on('companies')->onDelete('cascade');
         });
     }
 

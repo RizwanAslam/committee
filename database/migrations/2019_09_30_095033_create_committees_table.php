@@ -15,6 +15,7 @@ class CreateCommitteesTable extends Migration
     {
         Schema::create('committees', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('company_id');
             $table->string('name');
             $table->timestamp('start_date');
             $table->timestamp('end_date')->nullable();
@@ -23,6 +24,8 @@ class CreateCommitteesTable extends Migration
             $table->integer('withDraw_amount');
             $table->integer('amount');
             $table->timestamps();
+            $table->foreign('company_id')
+                ->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
