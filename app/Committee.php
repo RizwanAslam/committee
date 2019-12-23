@@ -16,7 +16,6 @@ class Committee extends Model
     {
         parent::boot();
         static::addGlobalScope(new CompanyScope());
-        static::observe(\App\Observers\CommonObserver::class);
 
     }
 

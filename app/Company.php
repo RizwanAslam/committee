@@ -10,7 +10,7 @@ class Company extends Model
 
     public function members()
     {
-        return $this->hasMany(Member::class);
+        return $this->belongsToMany(Member::class);
     }
 
     public function roles()

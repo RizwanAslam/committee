@@ -86,6 +86,9 @@ class RegisterController extends Controller
 
         $role = Role::updateOrCreate(['name' => 'admin']);
         $member->assignRole($role);
+        $member->company()->sync([
+            'company_id' => $company->id,
+        ]);
 
         return $member;
 

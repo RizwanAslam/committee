@@ -18,14 +18,12 @@ class CompanyScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if(! auth()->check()) {
-            Log::alert('Company Scope: Table name '.$model->getTable());
+        if (!auth()->check()) {
+            Log::alert('Company Scope: Table name ' . $model->getTable());
         }
-//
-        if(auth()->check()) {
-            $builder->whereHas('company', function ($q) use ($model) {
-                $q->where($model->getTable() . '.company_id', auth()->user()->company_id);
-            });
+
+        if (auth()->check()) {
+            $builder->where('company_id', auth()->user()->company_id);
         }
     }
 

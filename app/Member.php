@@ -49,13 +49,12 @@ class Member extends Authenticatable
         if (auth()->check()) {
             static::addGlobalScope(new CompanyScope());
         }
-        static::observe(CommonObserver::class);
 
     }
 
     public function company()
     {
-        return $this->belongsTo(Company::class, 'company_id', 'id');
+        return $this->belongsToMany(Company::class);
     }
 
     public function committees()

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Committee;
 use App\Http\Requests\MemberRequest;
 use App\Member;
+use App\Scopes\CompanyScope;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -55,11 +56,16 @@ class MemberController extends Controller
             'cnic' => $request->cnic,
             'address' => $request->address
         ]);
+
         $role = Role::updateOrCreate(['name' => 'member']);
         $member->assignRole($role);
         $response = $this->broker()->sendResetLink(
             $this->credentials($request)
         );
+
+        $member->company()->sync([
+            'company_id' => auth()->user()->company_id,
+        ]);
 
         return $response == Password::RESET_LINK_SENT
             ? $this->sendResetLinkResponse($request, $response)
