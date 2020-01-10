@@ -151,7 +151,7 @@ class CommitteeController extends Controller
             });
         return Datatables::of($committees)
             ->editColumn('name', function ($committee) {
-                return str_limit($committee->name, $limit = 10, $end = '...');
+                return $committee->name;
             })
             ->editColumn('start_date', function ($committee) {
                 return Carbon::parse($committee->start_date)->format('d-m-y');
