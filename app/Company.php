@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Scopes\CompanyScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Company extends Model
@@ -10,7 +11,7 @@ class Company extends Model
 
     public function members()
     {
-        return $this->belongsToMany(Member::class);
+        return $this->belongsToMany(Member::class)->withPivot(['member_id', 'company_id', 'role_id']);
     }
 
     public function roles()

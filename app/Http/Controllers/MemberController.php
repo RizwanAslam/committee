@@ -8,6 +8,7 @@ use App\Member;
 use App\Scopes\CompanyScope;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Spatie\Permission\Models\Role;
 use Yajra\DataTables\DataTables;
@@ -35,85 +36,102 @@ class MemberController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->hasRole('admin')) {
-            return view('admin.members.create');
+        if (\auth()->user()->isMember()) {
+            abort(404);
         }
-        return view('admin.members.index');
+        if (auth()->user()->isAdmin()) {
+            return \auth()->user()->is_permission() ? view('admin.members.create') : abort(404);
+        } else {
+            return view('admin.members.index');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(MemberRequest $request)
     {
-        $member = Member::query()->create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'email' => $request->email,
-            'cnic' => $request->cnic,
-            'address' => $request->address
-        ]);
+        if (Member::query()->where('email', $request->email)->withoutGlobalScope(CompanyScope::class)->exists()) {
+            $member = Member::where('email', $request->email)->withoutGlobalScope(CompanyScope::class)->first();
+            $role = Role::updateOrCreate(['name' => 'member']);
+            $member->assignRole($role);
+            $member->companies()->syncWithoutDetaching([auth()->user()->company_id => ['role_id' => $role->id]]);
+            return redirect(route('members.index'));
+        } else {
+            $member = Member::query()->create([
+                'company_id' => auth()->user()->company_id,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'email' => $request->email,
+                'cnic' => $request->cnic,
+                'address' => $request->address
+            ]);
 
-        $role = Role::updateOrCreate(['name' => 'member']);
-        $member->assignRole($role);
-        $response = $this->broker()->sendResetLink(
-            $this->credentials($request)
-        );
+            $role = Role::updateOrCreate(['name' => 'member']);
+            $member->assignRole($role);
 
-        $member->company()->sync([
-            'company_id' => auth()->user()->company_id,
-        ]);
+            $response = $this->broker()->sendResetLink(
+                $this->credentials($request)
+            );
 
-        return $response == Password::RESET_LINK_SENT
-            ? $this->sendResetLinkResponse($request, $response)
-            : $this->sendResetLinkFailedResponse($request, $response);
+            $member->companies()->sync([auth()->user()->company_id => ['role_id' => $role->id]]);
+
+            return $response == Password::RESET_LINK_SENT
+                ? $this->sendResetLinkResponse($request, $response)
+                : $this->sendResetLinkFailedResponse($request, $response);
+        }
 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $member = Member::findOrFail($id);
-        if (auth()->user()->hasRole('admin')) {
-            return view('admin.members.show', compact('member'));
+        if (\auth()->user()->isMember()) {
+            if ($member->id == auth()->user()->id) {
+                abort(404);
+            }
         }
-        if (auth()->user()->hasRole('member')) {
-            if ($member->id == auth()->user()->id)
-                return view('admin.members.show', compact('member'));
+        if (auth()->user()->isAdmin()) {
+            return $member->is_permission() ? view('admin.members.show', compact('member')) : abort(404);
+        } else {
+            return view('admin.members.index');
         }
-        return view('admin.members.index');
-
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $member = Member::findOrFail($id);
-            return view('admin.members.edit', compact('member'));
+        $member = Member::findOrFail($id);
+        if (\auth()->user()->isMember()) {
+            abort(404);
         }
-        return view('admin.members.index');
+        if (auth()->user()->isAdmin()) {
+            return $member->is_permission() ? view('admin.members.edit', compact('member')) : abort(404);
+        } else {
+            return view('admin.members.index');
+        }
+
     }
 
-
     /**
-     * Update the specified resource in storage.
+     * Update the specified resource in storage. 3216004563
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public
@@ -136,24 +154,24 @@ class MemberController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy($id)
+    public function destroy($id)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $member = Member::findOrFail($id);
-            if ($member->id == auth()->user()->id) {
-                $member->delete();
-                return redirect(route('members.index'));
-            }
+        $member = Member::findOrFail($id);
+        if (\auth()->user()->isMember()) {
+            abort(404);
         }
-        return view('admin.members.index');
+        if (auth()->user()->isAdmin()) {
+            $member->delete();
+            return redirect(route('members.index'));
+        } else {
+            return redirect(route('members.index'));
+        }
     }
 
-    public
-    function detail($committee_id, $member_id)
+    public function detail($committee_id, $member_id)
     {
         $committee = Committee::findOrFail($committee_id);
         $member = $committee->members()->wherePivot('member_id', $member_id)->first();
@@ -162,9 +180,21 @@ class MemberController extends Controller
 
     public function datatable()
     {
-        if (auth()->user()->hasRole('admin'))
-            $members = Member::select('id', 'first_name', 'last_name', 'email', 'cnic', 'address');
-        else
+        if (auth()->user()->hasRole('admin') && auth()->user()->hasRole('member')) {
+            $checkRole = auth()->user()->companies()->where('company_id', \Session::get('company_id'))->where('member_id', auth()->user()->id)->first();
+            if ($checkRole->pivot->role_id == 1) {
+                $members = Member::whereHas('companies', function ($query) {
+                    $query->where('role_id', 2)->where('company_id', \Session::get('company_id'));
+                });
+            }
+            if ($checkRole->pivot->role_id == 2) {
+                $members = Member::query()->where('id', auth()->user()->id)->select('id', 'first_name', 'last_name', 'email', 'cnic', 'address');
+            }
+        } elseif (auth()->user()->hasRole('admin')) {
+            $members = Member::whereHas('companies', function ($query) {
+                $query->where('role_id', 2)->where('company_id', \Session::get('company_id'));
+            });
+        } else
             $members = Member::query()->where('id', auth()->user()->id)->select('id', 'first_name', 'last_name', 'email', 'cnic', 'address');
         return Datatables::of($members)
             ->editColumn('first_name', function ($member) {

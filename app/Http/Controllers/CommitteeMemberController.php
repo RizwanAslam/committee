@@ -32,7 +32,10 @@ class CommitteeMemberController extends Controller
      */
     public function create($committee_id)
     {
-        if (auth()->user()->hasRole('admin')) {
+        if (\auth()->user()->isMember()) {
+            abort(404);
+        }
+        if (auth()->user()->isAdmin()) {
             $committee = Committee::where('id', $committee_id)->with(['members' => function ($query) {
                 $query->orderBy('withdraw_order', 'asc');
             }])->first();
@@ -46,7 +49,7 @@ class CommitteeMemberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -145,7 +148,7 @@ class CommitteeMemberController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -156,7 +159,7 @@ class CommitteeMemberController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Responses
      */
     public function edit($id)
@@ -167,8 +170,8 @@ class CommitteeMemberController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -213,7 +216,7 @@ class CommitteeMemberController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

@@ -27,7 +27,7 @@ class MemberRequest extends FormRequest
             'first_name' => 'required',
             'last_name' => 'required',
             'email' => 'required|email',
-            'cnic' => 'required|unique:members|min:15|max:15',
+//            'cnic' => 'required|unique:members|min:15|max:15',
             'address' => 'required',
         ];
     }

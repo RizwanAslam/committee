@@ -11,19 +11,15 @@
 |
 */
 
-//Route::get('/ok', function () {
-//    dd(\Carbon\Carbon::);
-//});
-
 Route::resource('dashboard', 'DashboardController');
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/', function () {
         return redirect(route('dashboard.index'));
     });
-
+    Route::get('/company/{id}', 'DashboardController@store')->name('companies.switch');
     Route::get('/committees/datatable', 'CommitteeController@datatable')->name('committees.datatable');
-    Route::resource('committees', 'CommitteeController');
     Route::get('/members/datatable', 'MemberController@datatable')->name('members.datatable');
+    Route::resource('committees', 'CommitteeController');
     Route::resource('members', 'MemberController');
     Route::get('committee/{id}/create', 'CommitteeMemberController@create')->name('committee-members.create');
     Route::resource('pays', 'PayController')->only([
@@ -33,8 +29,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('committee/{committee_id}/Details/{member_id}', 'MemberController@detail')->name('member-details.index');
     Route::resource('committee-members', 'CommitteeMemberController')->only([
         'index', 'show', 'update', 'destroy', 'edit', 'store'
-    ]);;
+    ]);
     Route::get('committee/{committeeId}/confirms/{memberId}/status/{id}', 'CommitteeMemberController@confirm')->name('committee-members.confirm');
+
     Route::get('/committee-reports/datatable/{id}', 'CommitteeReportController@datatable')->name('committee-reports.datatable');
     Route::resource('committee-reports', 'CommitteeReportController');
     Route::post('/committee-reports', 'CommitteeReportController@search');

@@ -64,6 +64,7 @@
 @section('script')
     <script>
         $(document).ready(function () {
+
             $('#committee-report').DataTable({
                 "processing": true,
                 "serverSide": true,

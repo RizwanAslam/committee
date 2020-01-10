@@ -17,13 +17,11 @@ class CreateCompanyMemberTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('member_id');
             $table->unsignedBigInteger('company_id');
-            $table->timestamps();
-            $table->foreign('member_id')
-                ->references('id')->on('members')
-                ->onDelete('cascade');
-            $table->foreign('company_id')
-                ->references('id')->on('companies')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('role_id')->nullable();
+
+            $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
+            $table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
         });
     }
 

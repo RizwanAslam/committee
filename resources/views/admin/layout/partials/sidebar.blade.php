@@ -20,8 +20,8 @@
 
 
         <!--------------------
-START - Mobile Menu List
--------------------->
+        START - Mobile Menu List
+        -------------------->
         <ul class="main-menu">
             <li class="has-sub-menu"><a href="#">
                     <div class="icon-w">
@@ -68,15 +68,13 @@ END - Mobile Menu
                     </div>
                     <div class="bg-icon"><i class="os-icon os-icon-wallet-loaded"></i></div>
                     <ul>
-                        <li><a href="#"><i
-                                        class="os-icon os-icon-mail-01"></i><span>Incoming Mail</span></a></li>
-                        <li><a href="#"><i
-                                        class="os-icon os-icon-user-male-circle2"></i><span>Profile Details</span></a>
-                        </li>
-                        <li><a href="#"><i class="os-icon os-icon-coins-4"></i><span>Billing Details</span></a>
-                        </li>
-                        <li><a href="#"><i class="os-icon os-icon-others-43"></i><span>Notifications</span></a>
-                        </li>
+
+                        @foreach(\Session::get('companies') as $company)
+                            <li>
+                                <a href="{{route('companies.switch',$company->id)}}" class="click"><i
+                                        class="os-icon os-icon-coins-4"></i><span>{{$company->name}}</span></a>
+                            </li>
+                        @endforeach
                         <li>
                             <a href="{{route('logout')}}"
                                onclick="event.preventDefault();

@@ -49,12 +49,11 @@ class Member extends Authenticatable
         if (auth()->check()) {
             static::addGlobalScope(new CompanyScope());
         }
-
     }
 
-    public function company()
+    public function companies()
     {
-        return $this->belongsToMany(Company::class);
+        return $this->belongsToMany(Company::class)->withPivot(['member_id', 'company_id', 'role_id']);
     }
 
     public function committees()
@@ -71,4 +70,27 @@ class Member extends Authenticatable
     {
         $this->notify(new MemberInvitationNotification($token));
     }
+
+    public function isAdmin()
+    {
+        if (auth()->user()->companies()->where('company_id', \Session::get('company_id'))->where('member_id', auth()->user()->id)->where('role_id', 1))
+            return true;
+    }
+
+    public function isMember()
+    {
+        $checkMember = auth()->user()->companies()->where('company_id', \auth()->user()->company_id)->first();
+        if ($checkMember->pivot->role_id == 2) {
+            return true;
+        }
+    }
+
+    public function is_permission()
+    {
+        $member_companies = $this->companies->pluck('id')->toArray();
+        $login_user_companies = auth()->user()->companies()->where('role_id', 1)->get()->pluck('id')->toArray();
+        return (count(array_intersect($member_companies, $login_user_companies)) > 0) ? true : false;
+    }
+
+
 }

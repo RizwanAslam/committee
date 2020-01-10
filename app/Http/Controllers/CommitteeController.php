@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Committee;
 use App\Http\Requests\CommitteeRequest;
+use App\Member;
 use App\Pay;
 use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
@@ -33,16 +34,21 @@ class CommitteeController extends Controller
      */
     public function create()
     {
-        if (auth()->user()->hasRole('admin')) {
-            return view('admin.committees.create');
+        if (\auth()->user()->isMember()) {
+            abort(404);
         }
-        return redirect(route('committees.index'));
+        if (auth()->user()->isAdmin()) {
+            return auth()->user()->is_permission() ? view('admin.committees.create') : abort(404);
+        } else {
+            return redirect(route('committees.index'));
+        }
+
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(CommitteeRequest $request)
@@ -54,6 +60,7 @@ class CommitteeController extends Controller
         $withDrawAmount = $request->total_members * $request->amount;
 
         Committee::query()->create([
+            'company_id' => auth()->user()->company_id,
             'name' => $request->name,
             'start_date' => $start_date->toDateTimeString(),
             'end_date' => $end_date->toDateTimeString(),
@@ -69,7 +76,7 @@ class CommitteeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -82,23 +89,28 @@ class CommitteeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $committee = Committee::find($id);
-            return view('admin.committees.edit', compact('committee'));
+        $committee = Committee::find($id);
+        if (\auth()->user()->isMember()) {
+            abort(404);
         }
-        return redirect(route('committees.index'));
+        if (auth()->user()->isAdmin()) {
+            return auth()->user()->is_permission() ? view('admin.committees.edit', compact('committee')) : abort(404);
+        } else {
+            return redirect(route('committees.index'));
+        }
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -113,13 +125,16 @@ class CommitteeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        if (auth()->user()->hasRole('admin')) {
-            $committee = Committee::findOrFail($id);
+        $committee = Committee::findOrFail($id);
+        if (auth()->user()->isMember()) {
+            abort(404);
+        }
+        if (auth()->user()->isAdmin()) {
             $committee->delete();
             return redirect(route('committees.index'));
         }

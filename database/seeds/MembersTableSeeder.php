@@ -28,5 +28,8 @@ class MembersTableSeeder extends Seeder
 
         $role = Role::query()->where('name', 'admin')->first();
         $member->assignRole($role);
+
+        $member->companies()->sync([$company->id => ['role_id' => $role->id]]);
+
     }
 }

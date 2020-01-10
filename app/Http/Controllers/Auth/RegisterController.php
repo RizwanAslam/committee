@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Company;
 use App\Http\Controllers\Controller;
 use App\Member;
+use App\Scopes\CompanyScope;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -55,9 +56,9 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'first_name' => 'required',
             'last_name' => 'required',
-            'cnic' => 'required|unique:members|min:15|max:15',
+            'cnic' => 'required|min:15|max:15',
             'address' => 'required',
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:members'],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -70,28 +71,39 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $company = Company::create([
-            'name' => $data['first_name']
-        ]);
+        if (Member::query()->where('email', $data['email'])->withoutGlobalScope(CompanyScope::class)->exists()) {
+            $member = Member::where('email', $data['email'])->withoutGlobalScope(CompanyScope::class)->first();
+            $company = Company::create([
+                'name' => $data['first_name']
+            ]);
 
-        $member = Member::create([
-            'company_id' => $company->id,
-            'first_name' => $data['first_name'],
-            'last_name' => $data['last_name'],
-            'email' => $data['email'],
-            'cnic' => $data['cnic'],
-            'address' => $data['address'],
-            'password' => Hash::make($data['password']),
-        ]);
+            $member->update(['password' => Hash::make($data['password'])]);
 
-        $role = Role::updateOrCreate(['name' => 'admin']);
-        $member->assignRole($role);
-        $member->company()->sync([
-            'company_id' => $company->id,
-        ]);
+            $role = Role::updateOrCreate(['name' => 'admin']);
+            $member->assignRole($role);
 
+            $member->companies()->syncWithoutDetaching([$company->id => ['role_id' => $role->id]]);
+
+        } else {
+            $company = Company::create([
+                'name' => $data['first_name']
+            ]);
+
+            $member = Member::create([
+                'company_id' => $company->id,
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'email' => $data['email'],
+                'cnic' => $data['cnic'],
+                'address' => $data['address'],
+                'password' => Hash::make($data['password']),
+            ]);
+
+            $role = Role::updateOrCreate(['name' => 'admin']);
+            $member->assignRole($role);
+
+            $member->companies()->sync([$company->id => ['role_id' => $role->id]]);
+        }
         return $member;
-
-
     }
 }
