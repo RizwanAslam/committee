@@ -51,6 +51,7 @@ class PayController extends Controller
 
         if ($exist == true) {
             $data = Pay::query()->create([
+                'company_id' => auth()->user()->company_id,
                 'committee_id' => $request->committee_id,
                 'member_id' => $request->member_id,
                 'date' => Carbon::now()->toDateTimeString(),

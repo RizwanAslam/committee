@@ -58,7 +58,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div>
                                 <button type="submit" class="btn btn-primary" style="cursor: pointer">Submit</button>
                             </div>
