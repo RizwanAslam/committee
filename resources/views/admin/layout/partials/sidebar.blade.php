@@ -68,6 +68,7 @@ END - Mobile Menu
                     </div>
                     <div class="bg-icon"><i class="os-icon os-icon-wallet-loaded"></i></div>
                     <ul>
+
                         @foreach(\Session::get('companies') as $company)
                             <li>
                                 <a href="{{route('companies.switch',$company->id)}}"

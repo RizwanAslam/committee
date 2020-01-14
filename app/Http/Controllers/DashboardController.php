@@ -51,7 +51,7 @@ class DashboardController extends Controller
             'company_id' => $company_id,
         ]);
         session(['company_id' => $company_id]);
-        return redirect()->route('members.index');
+        return redirect()->route('dashboard.index');
     }
 
     /**
