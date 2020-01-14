@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bbd8b0e8-e75c-49d1-9754-2116024640f2" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/public/assets/css/flatpickr.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/public/assets/js/flatpickr4.2.3flatpickr.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/committees/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committees/create.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/admin/layout/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/layout/app.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/layout/partials/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/layout/partials/sidebar.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />

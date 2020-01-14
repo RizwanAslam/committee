@@ -21,6 +21,13 @@
     <style>
         @yield('style')
     </style>
+    <style>
+        .active-sidebar {
+            border-radius: 4px;
+            color: lightslategray !important;
+            background-color: whitesmoke;
+        }
+    </style>
 </head>
 <body>
 <div id="app" class="all-wrapper menu-side">

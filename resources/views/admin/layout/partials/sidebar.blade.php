@@ -61,17 +61,17 @@ END - Mobile Menu
                     <div class="logged-user-avatar-info">
                         <div class="avatar-w"><img alt="" src="{{asset('assets/img/avatar1.jpg')}}"></div>
                         <div class="logged-user-info-w">
-                            <div class="logged-user-name">{{Auth::user()->full_name}}</div>
+                            <div class="logged-user-name">{{\Auth::user()->full_name}}</div>
 
                             <div class="logged-user-role">Administrator</div>
                         </div>
                     </div>
                     <div class="bg-icon"><i class="os-icon os-icon-wallet-loaded"></i></div>
                     <ul>
-
                         @foreach(\Session::get('companies') as $company)
                             <li>
-                                <a href="{{route('companies.switch',$company->id)}}" class="click"><i
+                                <a href="{{route('companies.switch',$company->id)}}"
+                                   class="{{$company->id  == auth()->user()->company_id ? 'active-sidebar' : ''}}"><i
                                         class="os-icon os-icon-coins-4"></i><span>{{$company->name}}</span></a>
                             </li>
                         @endforeach
@@ -124,3 +124,4 @@ END - Mobile Menu
 </div><!--------------------
 END - Menu side
 -------------------->
+
