@@ -151,7 +151,6 @@
         function calculateEndDate() {
             var currentDate = new Date($('#start_date').val());
             var endDate = new Date(currentDate.setMonth(currentDate.getMonth() + parseInt($("#total_members").val())));
-            console.log(endDate.getMonth() + parseInt(1) + '/' + endDate.getDate() + '/' + endDate.getFullYear());
             $("#end_date").val(endDate.getMonth() + parseInt(1) + '/' + endDate.getDate() + '/' + endDate.getFullYear());
 
 
