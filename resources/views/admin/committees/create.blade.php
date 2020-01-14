@@ -47,9 +47,10 @@
                                     <div class="form-group">
                                         <label for="start_date">Start Date</label>
                                         <div class="date-input">
-                                            <input class="form-control calculate-duration {{ $errors->has('start_date') ? 'has-error' : '' }}"
-                                                   name="start_date" id="start_date" placeholder=""
-                                                   value="{{old('start_date')}}" type="text">
+                                            <input
+                                                class="form-control calculate-duration {{ $errors->has('start_date') ? 'has-error' : '' }}"
+                                                name="start_date" id="start_date" placeholder=""
+                                                value="{{old('start_date')}}" type="text">
                                         </div>
                                         <div class="help-block form-text text-muted form-control-feedback">
                                             Pick From Calender
@@ -61,9 +62,10 @@
                                     <div class="form-group">
                                         <label for="end_date">End Date</label>
                                         <div class="date-input">
-                                            <input class="form-control calculate-duration {{ $errors->has('end_date') ? 'has-error' : '' }}"
-                                                   name="end_date" id="end_date" placeholder="" type="text"
-                                                   value="{{old('end_date')}}" readonly="readonly">
+                                            <input
+                                                class="form-control calculate-duration {{ $errors->has('end_date') ? 'has-error' : '' }}"
+                                                name="end_date" id="end_date" placeholder="" type="text"
+                                                value="{{old('end_date')}}" readonly="readonly">
                                         </div>
                                         <div class="help-block form-text with-errors text-muted form-control-feedback">
                                             Pick From Calender
@@ -110,15 +112,21 @@
 @endsection
 @section('script')
     <script>
+        $("#basicDate").flatpickr({
+            enableTime: true,
+            dateFormat: "m/d/Y"
+        });
+
         var date = new Date();
-        $('#start_date').daterangepicker({
-            "singleDatePicker": true,
+        $('#start_date').flatpickr({
+            // "singleDatePicker": true,
+            dateFormat: "m/d/Y",
             minDate: date,
         });
 
-
-        $('#end_date').daterangepicker({
-            "singleDatePicker": true,
+        $('#end_date').flatpickr({
+            // "singleDatePicker": true,
+            dateFormat: "m/d/Y",
             minDate: new Date(date.getTime() + 24 * 60 * 60 * 1000),
         });
 
@@ -143,13 +151,15 @@
         function calculateEndDate() {
             var currentDate = new Date($('#start_date').val());
             var endDate = new Date(currentDate.setMonth(currentDate.getMonth() + parseInt($("#total_members").val())));
+            console.log(endDate.getMonth() + parseInt(1) + '/' + endDate.getDate() + '/' + endDate.getFullYear());
             $("#end_date").val(endDate.getMonth() + parseInt(1) + '/' + endDate.getDate() + '/' + endDate.getFullYear());
 
 
-            $('#end_date').daterangepicker({
-                "singleDatePicker": true,
-                minDate: new Date(new Date($("#start_date").val()).getTime() + 24 * 60 * 60 * 1000),
-            });
+            // $('#end_date').flatpickr({
+            //     // "singleDatePicker": true,
+            //     dateFormat: "m/d/Y",
+            //     minDate: new Date(new Date($("#start_date").val()).getTime() + 24 * 60 * 60 * 1000),
+            // });
 
         }
 

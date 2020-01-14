@@ -13,6 +13,7 @@
     <link href="{{ asset('assets/favicon.png') }}" rel="shortcut icon">
     <link href="{{asset('assets/bower_components/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
     <link href="{{asset('assets/bower_components/perfect-scrollbar/css/perfect-scrollbar.min.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/css/flatpickr.css')}}" rel="stylesheet">
     <link href="{{asset('assets/css/main.css')}}" rel="stylesheet">
     <link href="{{asset('assets/icon_fonts_assets/feather/style.css')}}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -37,6 +38,7 @@
 <script src="{{asset('assets/bower_components/moment/moment.js')}}"></script>
 <script src="{{asset('assets/bower_components/bootstrap-validator/dist/validator.min.js')}}"></script>
 <script src="{{asset('assets/bower_components/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+<script src="{{asset('assets/js/flatpickr4.2.3flatpickr.js')}}"></script>
 <script src="{{asset('assets/js/jquery-ui.js')}}"></script>
 <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/3/jquery.inputmask.bundle.js"></script>
 <script src="{{ asset('/assets/dt/jquery.dataTables.js') }}"></script>

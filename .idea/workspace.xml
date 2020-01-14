@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bbd8b0e8-e75c-49d1-9754-2116024640f2" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/public/assets/css/flatpickr.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/assets/js/flatpickr4.2.3flatpickr.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/PayController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/PayController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database/seeds/MembersTableSeeder.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/seeds/MembersTableSeeder.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/committee_members/confirm.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committee_members/confirm.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/admin/committee_members/pay.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committee_members/pay.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/committees/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committees/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/layout/app.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/layout/app.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -216,7 +216,7 @@
       <workItem from="1578287252505" duration="610000" />
       <workItem from="1578546004200" duration="123000" />
       <workItem from="1578546218214" duration="1356000" />
-      <workItem from="1578548520670" duration="40523000" />
+      <workItem from="1578548520670" duration="51234000" />
     </task>
     <servers />
   </component>
