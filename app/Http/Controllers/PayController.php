@@ -6,6 +6,7 @@ use App\Committee;
 use App\Pay;
 Use \Carbon\Carbon;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\DeclareDeclare;
 
 class PayController extends Controller
 {
@@ -43,6 +44,7 @@ class PayController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request->all());
         $committee = Committee::find($request->committee_id);
         $exist = $committee->members()
             ->wherePivot('id', $request->id)

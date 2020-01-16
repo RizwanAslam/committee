@@ -53,6 +53,7 @@ class CommitteeController extends Controller
      */
     public function store(CommitteeRequest $request)
     {
+        
         //$user->roles()->attach(Role::where('role_desc', 'Superadmin')->get('id')->first());
 
         $start_date = Carbon::parse($request->start_date);

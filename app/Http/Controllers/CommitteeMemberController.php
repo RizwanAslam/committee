@@ -54,6 +54,7 @@ class CommitteeMemberController extends Controller
      */
     public function store(Request $request)
     {
+
         if ($request->submit == 'submit') {
             if ($request->get('form') == 'confirm') {
                 $committee = Committee::find($request->committee_id);
