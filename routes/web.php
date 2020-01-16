@@ -11,8 +11,9 @@
 |
 */
 
-Route::resource('dashboard', 'DashboardController');
+
 Route::group(['middleware' => 'auth'], function () {
+    Route::resource('dashboard', 'DashboardController');
     Route::get('/', function () {
         return redirect(route('dashboard.index'));
     });
