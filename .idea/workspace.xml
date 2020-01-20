@@ -2,6 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="bbd8b0e8-e75c-49d1-9754-2116024640f2" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Console/Commands/MonthlyDuplicate.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Console/Commands/MonthlyDuplicate.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/CommitteeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/CommitteeController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/committee_members/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committee_members/create.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/committee_members/partials/table.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committee_members/partials/table.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/committees/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committees/edit.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/committees/partials/actions.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committees/partials/actions.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/committees/show.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/committees/show.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/admin/layout/partials/sidebar.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/admin/layout/partials/sidebar.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -213,7 +222,9 @@
       <workItem from="1578546004200" duration="123000" />
       <workItem from="1578546218214" duration="1356000" />
       <workItem from="1578548520670" duration="51234000" />
-      <workItem from="1579004056077" duration="16881000" />
+      <workItem from="1579004056077" duration="34756000" />
+      <workItem from="1579509649786" duration="568000" />
+      <workItem from="1579510709576" duration="1908000" />
     </task>
     <servers />
   </component>

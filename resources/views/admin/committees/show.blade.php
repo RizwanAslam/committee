@@ -13,78 +13,33 @@
             <div class="col-sm-12">
                 <div class="element-wrapper">
                     <div class="element-box">
-                        <form id="formValidate">
-                            @csrf
-                            <h5 class="form-header">Show Committee</h5>
-                            <div>
-                                <hr/>
-                            </div>
-                            <div class="form-group">
-                                <label for="name"> Name</label>
-                                <input class="form-control" value="{{$committee->name}}" disabled type="text">
-                                <div class="help-block form-text with-errors form-control-feedback"></div>
-                            </div>
-                            <div class="form-group">
-                                <label for="total_members">Total Members</label>
-                                <input class="form-control" value="{{$committee->total_members}}" disabled type="text">
-                                <div class="help-block form-text with-errors form-control-feedback"></div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="start_date">Start Date</label>
-                                        <div class="date-input">
-                                            <input class="single-daterange form-control"
-                                                   value="{{\Carbon\Carbon::parse($committee->start_date)->format('m/d/y')}}"
-                                                   type="text" disabled>
-                                        </div>
-                                        <div class="help-block form-text text-muted form-control-feedback">
-                                        </div>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <h5 class="form-header">Monthly Details</h5>
+                                    </div>
+                                    <div class="col-md-6 p-1">
+                                        <form method="POST">
+                                            <input
+                                                class="form-control {{ $errors->has('search-input') ? 'has-error' : '' }}"
+                                                name="search-input" id="search-input" placeholder="Search..."
+                                                type="text" value="">
+                                        </form>
                                     </div>
                                 </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="end_date">End Date</label>
-                                        <div class="date-input">
-                                            <input class="single-daterange form-control"
-                                                   value="{{\Carbon\Carbon::parse($committee->end_date)->format('m/d/y')}}"
-                                                   type="text" disabled>
-                                        </div>
-                                        <div class="help-block form-text with-errors text-muted form-control-feedback">
+                            </div>
+                            <div class="col-md-4">
+                                <a role="button" href="{{ route('committee-members.create',$committee->id) }}"
+                                   class="btn btn-success m-1" style="float:right;">Withdraw</a>
+                                <a href="{{ route('committees.edit', $committee->id) }}" role="button"
+                                   class="btn btn-success m-1" style="float:right;">Edit</a>
+                            </div>
+                        </div>
 
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="duration">Duration</label>
-                                        <input class="form-control" value="{{$committee->duration}}" type="text"
-                                               disabled>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="amount">Amount</label>
-                                        <input class="form-control" value="{{$committee->amount}}" disabled type="text">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="withDraw_amount">Withdraw Amount</label>
-                                <input class="form-control" value="{{$committee->withDraw_amount}}" disabled
-                                       type="text">
-                                <div class="help-block form-text with-errors form-control-feedback"></div>
-                            </div>
-
-                            <div class="">
-                                <a role="button" class="btn btn-primary" href="{{route('committees.index')}}"
-                                   style="cursor: pointer">Back
-                                </a>
-                            </div>
-                        </form>
+                        <div>
+                            <hr/>
+                        </div>
                         <div class="table-responsive">
                             <table id="committee-members" width="100%" class="table table-striped table-lightfont">
                                 <thead>
@@ -127,4 +82,28 @@
     </div>
 @endsection
 @section('script')
+    <script>
+        $(document).ready(function () {
+            $("#search-input").flatpickr({
+                dateFormat: "M Y"
+            });
+
+            $("#search-input").ready(function () {
+                var committee_id = '{{ $committee->id}}';
+                var value = $("#search-input").val();
+                $.ajax({
+                    url: "/committees/" + committee_id,
+                    data: {
+                        '_token': '{{ csrf_token() }}',
+                        '_method': 'POST',
+                        'data': {value: value},
+                    },
+                    success: function (data) {
+                        //
+                    }
+                });
+            });
+        });
+
+    </script>
 @endsection

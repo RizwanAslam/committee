@@ -19,9 +19,19 @@
                 <div class="element-wrapper">
                     <div class="element-box">
                         <form id="formValidate" method="post" action="{{route('committees.update',$committee->id)}}">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h5 class="form-header">Edit Committee</h5>
+                                </div>
+                                <div class="col-md-4">
+                                    <a role="button" href="{{ route('committee-members.create',$committee->id) }}"
+                                       class="btn btn-success m-1" style="float:right;">Withdraw</a>
+                                    <a href="{{ route('committees.show', $committee->id) }}" role="button"
+                                       class="btn btn-success m-1" style="float:right;">Show</a>
+                                </div>
+                            </div>
                             {{method_field('PUT')}}
                             @csrf
-                            <h5 class="form-header">Edit Committee</h5>
                             <div>
                                 <hr/>
                             </div>
@@ -48,10 +58,11 @@
                                     <div class="form-group">
                                         <label for="start_date">Start Date</label>
                                         <div class="date-input">
-                                            <input class="form-control calculate-duration {{ $errors->has('start_date') ? 'has-error' : '' }}"
-                                                   name="start_date" id="start_date"
-                                                   value="{{\Carbon\Carbon::parse($committee->start_date)->format('m/d/y')}}"
-                                                   type="text" disabled="">
+                                            <input
+                                                class="form-control calculate-duration {{ $errors->has('start_date') ? 'has-error' : '' }}"
+                                                name="start_date" id="start_date"
+                                                value="{{\Carbon\Carbon::parse($committee->start_date)->format('m/d/y')}}"
+                                                type="text" disabled="">
                                         </div>
                                         <div class="help-block form-text text-muted form-control-feedback">
                                             Pick From Calender
@@ -63,10 +74,11 @@
                                     <div class="form-group">
                                         <label for="end_date">End Date</label>
                                         <div class="date-input">
-                                            <input class="form-control calculate-duration {{ $errors->has('end_date') ? 'has-error' : '' }}"
-                                                   id="end_date" type="text"
-                                                   value="{{\Carbon\Carbon::parse($committee->end_date)->format('m/d/y')}}"
-                                                   disabled>
+                                            <input
+                                                class="form-control calculate-duration {{ $errors->has('end_date') ? 'has-error' : '' }}"
+                                                id="end_date" type="text"
+                                                value="{{\Carbon\Carbon::parse($committee->end_date)->format('m/d/y')}}"
+                                                disabled>
                                         </div>
                                         <div class="help-block form-text with-errors text-muted form-control-feedback">
                                             Pick From Calender

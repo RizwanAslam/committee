@@ -53,7 +53,7 @@ class CommitteeController extends Controller
      */
     public function store(CommitteeRequest $request)
     {
-        
+
         //$user->roles()->attach(Role::where('role_desc', 'Superadmin')->get('id')->first());
 
         $start_date = Carbon::parse($request->start_date);
@@ -121,6 +121,11 @@ class CommitteeController extends Controller
             'name' => $request->name,
         ]);
         return redirect(route('committees.index'));
+    }
+
+    public function search(Request $request)
+    {
+        dd($request->all());
     }
 
     /**

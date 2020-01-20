@@ -36,6 +36,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/committee-reports/datatable/{id}', 'CommitteeReportController@datatable')->name('committee-reports.datatable');
     Route::resource('committee-reports', 'CommitteeReportController');
     Route::post('/committee-reports', 'CommitteeReportController@search');
+    Route::post('/committees/{id}', 'CommitteeController@search');
 
 });
 

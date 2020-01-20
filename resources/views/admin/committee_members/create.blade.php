@@ -71,11 +71,21 @@
             <div class="col-sm-12">
                 <div class="element-wrapper">
                     <div class="element-box">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h5 class="form-header">Create <b style="color: green">{{ $committee->name}}</b> Committee Members</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <a role="button" href="{{ route('committees.show',$committee->id) }}"
+                                   class="btn btn-success m-1" style="float:right;">Show</a>
+                                <a href="{{ route('committees.edit', $committee->id) }}" role="button"
+                                   class="btn btn-success m-1" style="float:right;">Edit</a>
+                            </div>
+                        </div>
                         <form id="formValidate" method="post" action="{{route('committee-members.store')}}">
                             @csrf
                             <input type="hidden" id="committee_id" name="committee_id" value="{{ $committee->id}}">
                             <input type="hidden" id="quantity" name="quantity" value="1">
-                            <h5 class="form-header">Create Committee Member</h5>
                             <div>
                                 <hr/>
                             </div>
@@ -90,24 +100,6 @@
                                 </div>
                             @endif
                             <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="">Committee</label>
-                                        <div class="name-input">
-                                            <input class="form-control" value="{{ $committee->name}}" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label for="">Committee Amount</label>
-                                        <div class="name-input">
-                                            <input class="form-control" value="{{ $committee->amount}}" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label for="member_id">Select Members</label>
@@ -116,7 +108,8 @@
                                                     class="form-control {{ $errors->has('member_id') ? 'has-error' : '' }}">
                                                 <option value="" disabled selected>Choose ...</option>
                                                 @foreach($members as $key => $member)
-                                                    <option value="{{ $member->id }}">{{ $member->first_name}} {{ $member->last_name}}</option>
+                                                    <option
+                                                        value="{{ $member->id }}">{{ $member->first_name}} {{ $member->last_name}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="help-block form-text with-errors form-control-feedback"></div>
@@ -127,11 +120,11 @@
 
                             <div class="">
                                 <button type="submit" value="submit" name="submit" class="btn btn-primary"
-                                        style="cursor: pointer">Submit
+                                        style="cursor: pointer">Add Member
                                 </button>
                                 @if($committee->members->count()==$committee->total_members)
                                     <button type="submit" value="withdraw" name="withdraw" class="btn btn-success"
-                                            style="cursor: pointer">Withdraw
+                                            style="cursor: pointer">Shuffle
                                     </button>
                                 @endif
                             </div>

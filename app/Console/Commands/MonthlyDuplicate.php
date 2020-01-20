@@ -41,7 +41,6 @@ class MonthlyDuplicate extends Command
     {
         $committees = Committee::all();
         $endDate = Carbon::now()->toDateTimeString();
-
         foreach ($committees as $committee) {
             if ($endDate < $committee->end_date) {
                 foreach ($committee->members as $member) {
